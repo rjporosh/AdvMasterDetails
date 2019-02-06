@@ -1,0 +1,45 @@
+﻿@using AdvMasterDetails.Models
+@model IEnumerable<Orders>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Orders";
+}
+<h2>Orders</h2>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/gridmvc.min.js"></script>
+
+<div class ="Code-Cut">
+    @Html.Grid(Model).Columns(Column =>
+    {
+    Column.Add(c => c.OrderId).Titled("Order Id").Filterable(true);
+    Column.Add(c=>c.OrderNo).Titled("Order No").Filterable(true);
+    Column.Add(c=>c.OrderDate).Titled("Order Date").Filterable(true);
+    Column.Add(c=>c.Description).Titled("Order Details").Filterable(true);
+
+        Column.Add()
+            .Encoded(false)
+            .Sanitized(false)
+            .SetWidth(30)
+            .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new {id = o.OrderId}));
+    }).WithPaging(10).Sortable(true)
+</div>
+
+@*<table>
+    <tr>
+        <th>  Order-Id     </th>
+        <th>  Order-No     </th>
+        <th>  Order-Date   </th>
+        <th>  Description  </th>
+    </tr>
+    @foreach(Orders Order in Model)
+    {
+        <tr>
+            <td>@Order.OrderId</td>  
+            <td>@Order.OrderNo</td>
+            <td>@Order.OrderDate</td> 
+            <td>@Order.Description</td> 
+        </tr>
+    }
+</table>*@

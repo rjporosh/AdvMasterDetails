@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AdvMasterDetails.Models;
 
 namespace AdvMasterDetails.Controllers
 {
@@ -32,6 +35,48 @@ namespace AdvMasterDetails.Controllers
             }
             return new JsonResult { Data = products, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         }
+        public ActionResult ShowAll()
+        {
+            //String connnectionString = "data source=(LocalDB)\\MSSQLLocalDB;attachdbfilename=|DataDirectory|\\MyDatabase.mdf;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework";
+            //SqlConnection con = new SqlConnection(connnectionString);
+            //if (con.State == ConnectionState.Closed)
+            //{
+            //    con.Open();
+            //}
+            //String sql = "SELECT * FROM OrderMaster";
+            //SqlCommand cmd = new SqlCommand(sql, con);
+
+            //var model = new List<Orders>();
+            //using (SqlConnection conn = new SqlConnection(connnectionString))
+            //{
+            //    conn.Open();
+            //    SqlDataReader rdr = cmd.ExecuteReader();
+            //    while (rdr.Read())
+            //    {
+            //        var order = new Orders();
+            //        order.OrderId = (int) rdr["OrderId"];
+            //        order.OrderNo = (string) rdr["OrderNo"];
+            //        order.OrderDate = (DateTime) rdr["OrderDate"];
+            //        order.Description = rdr["Description"].ToString();
+
+
+            //        model.Add(order);
+            //    }
+            //    conn.Close();
+            //}
+            //con.Close();
+            //return View(model);
+            MyDatabaseEntities db = new MyDatabaseEntities();
+            var result = (from c in db.OrderMasters
+                select new Orders()
+                {
+                    OrderId = c.OrderID,
+                    OrderNo = c.OrderNo,
+                    OrderDate = c.OrderDate,
+                    Description = c.Description
+                }).ToList();
+            return View(result);
+        }
         [HttpPost]
         public JsonResult Save(OrderMaster order)
         {
@@ -56,6 +101,11 @@ namespace AdvMasterDetails.Controllers
                 }
             }
             return new JsonResult { Data = new { status = status } };
+        }
+
+        public ActionResult Edit(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
