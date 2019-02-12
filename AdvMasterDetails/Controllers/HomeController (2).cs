@@ -73,11 +73,43 @@ namespace AdvMasterDetails.Controllers
             return new JsonResult { Data = new { status = status } };
         }
 
-        public ActionResult Edit(Orders id,Details i)
+        public ActionResult Edit(OrderMaster id)
         {
-
-          return View("Index");
-
+             var result = false;
+            try
+            {
+                OrderDetail od = new OrderDetail();
+                if (id.OrderID > 0)
+                {
+                    OrderMaster om = db.OrderMasters.SingleOrDefault(x => x.OrderID == id.OrderID);
+                    om.OrderID = id.OrderID;
+                    om.OrderNo = id.OrderNo;
+                    om.OrderDate = id.OrderDate;
+                    om.OrderDetails = id.OrderDetails;
+                    db.SaveChanges();
+                    result = true;
+                }
+                //else
+                //{
+                //    od.OrderID=om.OrderID = id.OrderId;
+                //    om.OrderNo = id.OrderNo;
+                //    om.OrderDate = id.OrderDate;
+                //    om.OrderDetails = id.Description;
+                //    db.OrderMasters.Add(om);
+                //    db.OrderDetails.Add(od);
+                //    db.SaveChanges();
+                //    result = true;
+                //}
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            //return View("ShowAll");
+            return Json(result, JsonRequestBehavior.AllowGet);
+            throw new NotImplementedException();
+          
+            
         }
 
         public ActionResult Delete(int id)
@@ -92,10 +124,13 @@ namespace AdvMasterDetails.Controllers
                 db.SaveChanges();
                 result = true;
             }
-
-
+            
+            
             return Json(result, JsonRequestBehavior.AllowGet);
             //return View("ShowAll");
+            throw new NotImplementedException();
         }
+
+
     }
 }
